@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es-MX"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cotizador Argos</title><link rel="stylesheet" href="styles.css">
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+</head><body>
+  <main class="app">
+    <header><div class="brand-mark">A</div><div><h1>Cotizador Argos</h1><p>Protección por fallecimiento</p></div></header>
+    <section class="card"><h2>Datos del asegurado</h2>
+      <label for="nombre">Nombre <span>(opcional)</span></label><input id="nombre" autocomplete="name" placeholder="Nombre completo">
+      <div class="input-mode"><button id="modoEdad" class="selected" type="button">Ingresar edad</button><button id="modoRfc" type="button">Ingresar RFC</button></div>
+      <div id="campoEdad"><label for="edad">Edad</label><input id="edad" inputmode="numeric" type="number" min="50" max="70" placeholder="50 a 70 años"></div>
+      <div id="campoRfc" hidden><label for="rfc">RFC</label><input id="rfc" maxlength="13" autocapitalize="characters" placeholder="Ej. GODE561231GR8"><p class="hint">Usamos la fecha de nacimiento incluida en el RFC.</p></div>
+      <p class="error" id="error" role="alert"></p><button id="cotizar" class="primary" type="button">Ver cotización</button>
+    </section>
+    <section id="resultado" class="result" hidden><div class="result-top"><div><p class="eyebrow">COTIZACIÓN PARA</p><h2 id="titular">Asegurado</h2><p id="edadCalculada"></p></div><button id="pdf" class="secondary" type="button">Descargar PDF</button></div><div id="planes" class="plans"></div><p class="notice">Importes expresados en moneda nacional. Cotización informativa, sujeta a las condiciones y aprobación aplicables.</p></section>
+  </main><script src="app.js"></script>
+</body></html>
