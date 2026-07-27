@@ -12,7 +12,7 @@ Complemento de Outlook que genera una cotización PDF para los planes 329, 328 y
 
 ## Publicación
 
-Antes de instalarlo para otras personas, publica estos archivos en un servidor HTTPS y reemplaza cada aparición de `https://localhost:3000` en `manifest.xml` por la dirección pública definitiva. Después, distribuye ese manifiesto desde el centro de administración de Microsoft 365.
+El complemento está publicado en `https://addin.solucionescerteza.com.mx/argos/`. El manifiesto ya contiene esta dirección pública y se puede distribuir desde el centro de administración de Microsoft 365.
 
 ## Alcance de la tarifa
 
