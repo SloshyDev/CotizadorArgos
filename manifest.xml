@@ -10,8 +10,8 @@
   <DefaultLocale>es-MX</DefaultLocale>
   <DisplayName DefaultValue="Cotizador Argos"/>
   <Description DefaultValue="Genera cotizaciones Argos en PDF desde Outlook."/>
-  <IconUrl DefaultValue="https://addin.solucionescerteza.com.mx/argos/assets/icon.svg"/>
-  <HighResolutionIconUrl DefaultValue="https://addin.solucionescerteza.com.mx/argos/assets/icon.svg"/>
+  <IconUrl DefaultValue="https://addin.solucionescerteza.com.mx/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://addin.solucionescerteza.com.mx/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://addin.solucionescerteza.com.mx/argos/"/>
   <AppDomains><AppDomain>https://addin.solucionescerteza.com.mx</AppDomain></AppDomains>
   <Hosts><Host Name="Mailbox"/></Hosts>
@@ -30,7 +30,7 @@
         <ExtensionPoint xsi:type="MessageReadCommandSurface"><OfficeTab id="TabDefault"><Group id="argosGroup"><Label resid="GroupLabel"/><Control xsi:type="Button" id="openCotizador"><Label resid="ButtonLabel"/><Supertip><Title resid="ButtonLabel"/><Description resid="ButtonDescription"/></Supertip><Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon><Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url"/></Action></Control></Group></OfficeTab></ExtensionPoint>
       </DesktopFormFactor></Host></Hosts>
       <Resources>
-        <bt:Images><bt:Image id="Icon16" DefaultValue="https://addin.solucionescerteza.com.mx/argos/assets/icon.svg"/><bt:Image id="Icon32" DefaultValue="https://addin.solucionescerteza.com.mx/argos/assets/icon.svg"/><bt:Image id="Icon80" DefaultValue="https://addin.solucionescerteza.com.mx/argos/assets/icon.svg"/></bt:Images>
+        <bt:Images><bt:Image id="Icon16" DefaultValue="https://addin.solucionescerteza.com.mx/assets/icon-16.png"/><bt:Image id="Icon32" DefaultValue="https://addin.solucionescerteza.com.mx/assets/icon-32.png"/><bt:Image id="Icon80" DefaultValue="https://addin.solucionescerteza.com.mx/assets/icon-80.png"/></bt:Images>
         <bt:Urls><bt:Url id="Commands.Url" DefaultValue="https://addin.solucionescerteza.com.mx/argos/commands.html"/><bt:Url id="Taskpane.Url" DefaultValue="https://addin.solucionescerteza.com.mx/argos/taskpane.html"/></bt:Urls>
         <bt:ShortStrings><bt:String id="GroupLabel" DefaultValue="Argos"/><bt:String id="ButtonLabel" DefaultValue="Cotizar"/></bt:ShortStrings>
         <bt:LongStrings><bt:String id="ButtonDescription" DefaultValue="Abre el cotizador Argos y genera un PDF."/></bt:LongStrings>
