@@ -28,7 +28,7 @@ function mostrar() {
   if(!Number.isInteger(edad)) return $('error').textContent=modo==='rfc'?'Escribe un RFC con una fecha válida.':'Escribe una edad válida.';
   if(!tarifas[edad]) return $('error').textContent=`La tabla disponible cubre edades de 50 a 70 años. Edad calculada: ${edad}.`;
   cotizacion={edad,nombre:$('nombre').value.trim()||'Asegurado',fecha:new Date()}; $('titular').textContent=cotizacion.nombre; $('edadCalculada').textContent=`Edad: ${edad} años`;
-  $('planes').innerHTML=planes.map((plan,i)=>`<article class="plan"><h3>Plan ${plan.id}</h3><p class="sum">Suma asegurada<strong>${money(plan.suma)}</strong></p><p class="premium">Prima quincenal<strong>${money(tarifas[edad][i])}</strong></p></article>`).join('');
+  $('planes').innerHTML=planes.map((plan,i)=>`<article class="plan"><h3>Plan ${plan.id}</h3><p class="sum">Suma asegurada<strong>${money(plan.suma)}</strong></p><p class="premium">Pago mensual<strong>${money(tarifas[edad][i])}</strong></p></article>`).join('');
   $('resultado').hidden=false;
 }
 function pdf() {
@@ -37,8 +37,8 @@ function pdf() {
   try { const { jsPDF }=window.jspdf, doc=new jsPDF(); const fecha=cotizacion.fecha.toLocaleDateString('es-MX');
   doc.setFillColor(0,138,55); doc.rect(0,0,210,29,'F'); doc.setTextColor(255,255,255); doc.setFontSize(21); doc.text('Cotización Argos',15,18);
   doc.setTextColor(23,51,36); doc.setFontSize(11); doc.text(`Fecha: ${fecha}`,15,42); doc.setFontSize(16); doc.text(cotizacion.nombre,15,54); doc.setFontSize(11); doc.text(`Edad: ${cotizacion.edad} años`,15,62);
-  let y=78; planes.forEach((plan,i)=>{ doc.setFillColor(i===0?0:82,i===0?138:169,i===0?55:68); doc.roundedRect(15,y,180,31,3,3,'F'); doc.setTextColor(255,255,255); doc.setFontSize(14); doc.text(`Plan ${plan.id}`,22,y+12); doc.setFontSize(10); doc.text('Suma asegurada',77,y+10); doc.text('Prima quincenal',145,y+10); doc.setFontSize(13); doc.text(money(plan.suma),77,y+21); doc.text(money(tarifas[cotizacion.edad][i]),145,y+21); y+=39; });
-  doc.setTextColor(90,105,96); doc.setFontSize(9); doc.text('La prima indicada corresponde a un pago quincenal. Importes en moneda nacional; cotización informativa, sujeta a condiciones y aprobación aplicables.',15,205,{maxWidth:180});
+  let y=78; planes.forEach((plan,i)=>{ doc.setFillColor(i===0?0:82,i===0?138:169,i===0?55:68); doc.roundedRect(15,y,180,31,3,3,'F'); doc.setTextColor(255,255,255); doc.setFontSize(14); doc.text(`Plan ${plan.id}`,22,y+12); doc.setFontSize(10); doc.text('Suma asegurada',77,y+10); doc.text('Pago mensual',145,y+10); doc.setFontSize(13); doc.text(money(plan.suma),77,y+21); doc.text(money(tarifas[cotizacion.edad][i]),145,y+21); y+=39; });
+  doc.setTextColor(90,105,96); doc.setFontSize(9); doc.text('El importe indicado corresponde a un pago mensual. Importes en moneda nacional; cotización informativa, sujeta a condiciones y aprobación aplicables.',15,205,{maxWidth:180});
   const archivo=`Cotizacion-Argos-${cotizacion.edad}-anos.pdf`, url=doc.output('bloburl'), enlace=document.createElement('a'); enlace.href=url; enlace.download=archivo; enlace.style.display='none'; document.body.appendChild(enlace); enlace.click(); enlace.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
   } catch (e) { console.error(e); $('error').textContent='No fue posible generar el PDF. Recarga el complemento e inténtalo de nuevo.'; }
 }
