@@ -1,6 +1,18 @@
-# Cotizador Argos para Outlook
+# Cotizador Argos
 
-Complemento de Outlook que genera una cotización PDF para los planes 329, 328 y 327. La edad puede capturarse directamente o calcularse desde la fecha de nacimiento contenida en un RFC mexicano.
+Cotizador de seguro por fallecimiento para los planes 329, 328 y 327. La edad puede capturarse directamente o calcularse desde la fecha de nacimiento contenida en un RFC mexicano.
+
+## Extensión del navegador
+
+La versión recomendada para grupos cerrados funciona en Chrome, Edge y navegadores Chromium. Genera el PDF directamente y procesa toda la información de manera local.
+
+- [Guía de instalación para usuarios](docs/INSTALACION_EXTENSION.md)
+- [Guía de distribución privada](docs/DISTRIBUCION_PRIVADA.md)
+- [Código de la extensión](browser-extension)
+
+Para construir el paquete ejecuta `npm install` y `npm run build:extension`.
+
+## Complemento de Outlook
 
 ## Uso local
 
