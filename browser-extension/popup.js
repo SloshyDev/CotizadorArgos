@@ -1,18 +1,77 @@
 const tarifas={50:[150,134,118],51:[164,146,129],52:[178,158,138],53:[194,172,150],54:[212,188,164],55:[230,204,178],56:[248,220,192],57:[268,237,206],58:[292,258,224],59:[318,280,242],60:[348,306,264],61:[382,336,290],62:[422,372,322],63:[460,405,351],64:[498,438,380],65:[540,475,410],66:[582,512,442],67:[626,550,474],68:[676,594,512],69:[730,642,554],70:[792,695,598]};
-const planes=[['329',200000],['328',175000],['327',150000]],$=id=>document.getElementById(id),money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);let mode='age',quote;
-function setMode(next){mode=next;$('edadMode').classList.toggle('active',next==='age');$('rfcMode').classList.toggle('active',next==='rfc');$('ageField').hidden=next!=='age';$('rfcField').hidden=next!=='rfc';$('error').textContent=''}
-function rfcDate(value){const rfc=value.trim().toUpperCase().replace(/[^A-Z0-9Ñ&]/g,''),start=rfc.length===13?4:rfc.length===12?3:-1;if(start<0||!/^\d{6}$/.test(rfc.slice(start,start+6)))return null;const yy=+rfc.slice(start,start+2),month=+rfc.slice(start+2,start+4),day=+rfc.slice(start+4,start+6),year=(yy>new Date().getFullYear()%100?1900:2000)+yy,date=new Date(year,month-1,day);return date.getFullYear()===year&&date.getMonth()===month-1&&date.getDate()===day?date:null}
-function ageOf(date){const now=new Date(),birthday=new Date(now.getFullYear(),date.getMonth(),date.getDate());return now.getFullYear()-date.getFullYear()-(now<birthday?1:0)}
-function calculate(){const age=mode==='age'?+$('edad').value:(rfcDate($('rfc').value)?ageOf(rfcDate($('rfc').value)):NaN);$('error').textContent='';if(!Number.isInteger(age))return $('error').textContent=mode==='rfc'?'Escribe un RFC válido.':'Escribe una edad válida.';if(!tarifas[age])return $('error').textContent=`La tabla cubre edades de 50 a 70 años. Edad calculada: ${age}.`;quote={age,name:$('nombre').value.trim()||'Asegurado',date:new Date()};$('person').textContent=quote.name;$('ageResult').textContent=`Edad: ${age} años`;$('plans').innerHTML=planes.map(([id,sum],i)=>`<article class="plan"><h3>Plan ${id}</h3><p>Suma<strong>${money(sum)}</strong></p><p class="price">Pago mensual<strong>${money(tarifas[age][i])}</strong></p></article>`).join('');$('result').hidden=false}
+const planes=[['329',200000],['328',175000],['327',150000]];
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
 const loadImage=src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src});
-async function download(){
-  if(!quote||!window.jspdf)return;
+let mode='age';
+
+function setMode(next){mode=next;$('edadMode').classList.toggle('active',next==='age');$('rfcMode').classList.toggle('active',next==='rfc');$('ageField').hidden=next!=='age';$('rfcField').hidden=next!=='rfc';$('error').textContent='';$('status').textContent=''}
+function rfcDate(value){const rfc=value.trim().toUpperCase().replace(/[^A-Z0-9Ñ&]/g,''),start=rfc.length===13?4:rfc.length===12?3:-1;if(start<0||!/^\d{6}$/.test(rfc.slice(start,start+6)))return null;const yy=+rfc.slice(start,start+2),month=+rfc.slice(start+2,start+4),day=+rfc.slice(start+4,start+6),year=(yy>new Date().getFullYear()%100?1900:2000)+yy,date=new Date(year,month-1,day);return date.getFullYear()===year&&date.getMonth()===month-1&&date.getDate()===day?date:null}
+function ageOf(date){const now=new Date(),birthday=new Date(now.getFullYear(),date.getMonth(),date.getDate());return now.getFullYear()-date.getFullYear()-(now<new Date(now.getFullYear(),date.getMonth(),date.getDate())?1:0)}
+function glass(doc,x,y,w,h,r=4,opacity=.88){doc.setGState(new doc.GState({opacity:.12}));doc.setFillColor(18,46,32);doc.roundedRect(x+1.2,y+1.8,w,h,r,r,'F');doc.setGState(new doc.GState({opacity}));doc.setFillColor(255,255,255);doc.roundedRect(x,y,w,h,r,r,'F');doc.setGState(new doc.GState({opacity:1}));doc.setDrawColor(238,244,240);doc.setLineWidth(.45);doc.roundedRect(x,y,w,h,r,r,'S')}
+
+async function createPdf(quote){
   const{jsPDF}=window.jspdf,doc=new jsPDF(),date=quote.date.toLocaleDateString('es-MX');
-  const[certeza,argos]=await Promise.all([loadImage(chrome.runtime.getURL('assets/certeza-logo.png')),loadImage(chrome.runtime.getURL('assets/argos-logo.png'))]);
-  doc.setFillColor(255,255,255);doc.rect(0,0,210,39,'F');doc.addImage(certeza,'PNG',15,9,72,19);
-  doc.setTextColor(160,170,162);doc.setFontSize(20);doc.text('×',101,22);doc.addImage(argos,'PNG',116,7,76,31);doc.setDrawColor(225,232,227);doc.setLineWidth(.5);doc.line(15,39,195,39);
-  doc.setTextColor(100,116,105);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text('ALIANZA COMERCIAL',15,49);doc.text(`Fecha: ${date}`,195,49,{align:'right'});doc.setTextColor(23,51,36);doc.setFontSize(16);doc.text(quote.name,15,61);doc.setFontSize(11);doc.text(`Edad: ${quote.age} años`,15,69);
-  let y=84;planes.forEach(([id,sum],i)=>{doc.setFillColor(i?82:0,i?169:138,i?68:55);doc.roundedRect(15,y,180,31,3,3,'F');doc.setTextColor(255,255,255);doc.setFontSize(14);doc.text(`Plan ${id}`,22,y+12);doc.setFontSize(10);doc.text('Suma asegurada',77,y+10);doc.text('Pago mensual',145,y+10);doc.setFontSize(13);doc.text(money(sum),77,y+21);doc.text(money(tarifas[quote.age][i]),145,y+21);y+=39});
-  doc.setTextColor(90,105,96);doc.setFontSize(9);doc.text('El importe indicado corresponde a un pago mensual. Importes en moneda nacional; cotización informativa, sujeta a condiciones y aprobación aplicables.',15,212,{maxWidth:180});doc.save(`Cotizacion-Argos-${quote.age}-anos.pdf`)
+  const[certeza,argos,familia]=await Promise.all([
+    loadImage(chrome.runtime.getURL('assets/certeza-logo.png')),
+    loadImage(chrome.runtime.getURL('assets/argos-logo.png')),
+    loadImage(chrome.runtime.getURL('assets/proteccion-familiar.jpg'))
+  ]);
+
+  doc.setFillColor(240,245,242);doc.rect(0,0,210,297,'F');
+  doc.addImage(familia,'JPEG',0,0,210,102);
+  doc.setGState(new doc.GState({opacity:.28}));doc.setFillColor(3,72,38);doc.rect(0,0,210,102,'F');doc.setGState(new doc.GState({opacity:1}));
+
+  glass(doc,12,9,186,27,5,.9);
+  doc.addImage(certeza,'PNG',18,14,65,17);
+  doc.setTextColor(150,160,153);doc.setFontSize(18);doc.text('×',100,25);
+  doc.addImage(argos,'PNG',117,11,72,23);
+
+  glass(doc,13,45,112,44,6,.78);
+  doc.setTextColor(98,20,51);doc.setFont('helvetica','bold');doc.setFontSize(8);doc.text('PROTECCIÓN ECONÓMICA PARA TU FAMILIA',20,58);
+  doc.setTextColor(6,80,43);doc.setFontSize(22);doc.text('SEGURO POR',20,70);doc.text('FALLECIMIENTO',20,82);
+
+  glass(doc,15,109,180,27,5,.92);
+  doc.setTextColor(105,120,110);doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.text('COTIZACIÓN PERSONALIZADA',22,119);
+  doc.setTextColor(31,53,43);doc.setFontSize(14);doc.text(quote.name,22,130);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text(`Edad: ${quote.age} años`,188,129,{align:'right'});doc.text(`Fecha: ${date}`,188,118,{align:'right'});
+
+  doc.setTextColor(31,53,43);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('Elige el nivel de protección',15,148);
+  planes.forEach(([id,sum],i)=>{
+    const x=15+i*61;
+    glass(doc,x,154,56,61,5,.9);
+    doc.setFillColor(i===0?0:38,i===0?138:135,i===0?66:73);doc.roundedRect(x,154,56,7,5,5,'F');doc.rect(x,158,56,3,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text(`PLAN ${id}`,x+28,159,{align:'center'});
+    doc.setTextColor(105,120,110);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text('SUMA ASEGURADA',x+7,172);doc.text('POR FALLECIMIENTO',x+7,177);
+    doc.setTextColor(31,53,43);doc.setFont('helvetica','bold');doc.setFontSize(13);doc.text(money(sum),x+7,187);
+    doc.setTextColor(105,120,110);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text('PAGO MENSUAL',x+7,197);
+    doc.setTextColor(0,125,61);doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text(money(tarifas[quote.age][i]),x+7,208);
+  });
+
+  glass(doc,15,226,180,32,5,.82);
+  doc.setFillColor(98,20,51);doc.circle(26,242,6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('✓',26,245,{align:'center'});
+  doc.setTextColor(31,53,43);doc.setFontSize(10);doc.text('Seguro por fallecimiento',38,239);
+  doc.setTextColor(93,109,99);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('La suma asegurada brinda respaldo económico a los beneficiarios',38,246);doc.text('en caso de fallecimiento del asegurado titular.',38,251);
+
+  doc.setTextColor(100,115,105);doc.setFontSize(7.5);doc.text('El importe indicado corresponde a un pago mensual. Cotización informativa, sujeta a condiciones, exclusiones y aprobación aplicables.',15,275,{maxWidth:180});
+  doc.setDrawColor(205,218,209);doc.line(15,282,195,282);doc.setTextColor(120,132,124);doc.text('Certeza Soluciones en Seguros  ×  Seguros Argos',15,289);doc.text('Alianza comercial',195,289,{align:'right'});
+  doc.save(`Cotizacion-Seguro-Fallecimiento-${quote.age}-anos.pdf`);
 }
-$('edadMode').onclick=()=>setMode('age');$('rfcMode').onclick=()=>setMode('rfc');$('quote').onclick=calculate;$('download').onclick=download;$('rfc').oninput=e=>e.target.value=e.target.value.toUpperCase();
+
+async function calculate(){
+  const date=mode==='rfc'?rfcDate($('rfc').value):null;
+  const age=mode==='age'?+$('edad').value:(date?ageOf(date):NaN);
+  $('error').textContent='';$('status').textContent='';
+  if(!Number.isInteger(age)){ $('error').textContent=mode==='rfc'?'Escribe un RFC válido.':'Escribe una edad válida.';return }
+  if(!tarifas[age]){ $('error').textContent=`La tabla cubre edades de 50 a 70 años. Edad calculada: ${age}.`;return }
+  if(!window.jspdf){ $('error').textContent='No se pudo cargar el generador de PDF.';return }
+  const button=$('quote');button.disabled=true;button.textContent='Generando PDF…';
+  try{await createPdf({age,name:$('nombre').value.trim()||'Asegurado',date:new Date()});$('status').textContent='Cotización descargada.'}
+  catch(error){console.error(error);$('error').textContent='No fue posible generar el PDF. Inténtalo de nuevo.'}
+  finally{button.disabled=false;button.textContent='Generar cotización PDF'}
+}
+
+$('edadMode').onclick=()=>setMode('age');
+$('rfcMode').onclick=()=>setMode('rfc');
+$('quote').onclick=calculate;
+$('rfc').oninput=event=>event.target.value=event.target.value.toUpperCase();
