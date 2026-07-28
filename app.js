@@ -32,11 +32,15 @@ function mostrar() {
   $('resultado').hidden=false;
 }
 function pdf() {
-  if(!cotizacion) return; const { jsPDF }=window.jspdf, doc=new jsPDF(); const fecha=cotizacion.fecha.toLocaleDateString('es-MX');
+  if(!cotizacion) return;
+  if(!window.jspdf || !window.jspdf.jsPDF) { $('error').textContent='No se pudo cargar el generador de PDF. Recarga el complemento e inténtalo de nuevo.'; return; }
+  try { const { jsPDF }=window.jspdf, doc=new jsPDF(); const fecha=cotizacion.fecha.toLocaleDateString('es-MX');
   doc.setFillColor(0,138,55); doc.rect(0,0,210,29,'F'); doc.setTextColor(255,255,255); doc.setFontSize(21); doc.text('Cotización Argos',15,18);
   doc.setTextColor(23,51,36); doc.setFontSize(11); doc.text(`Fecha: ${fecha}`,15,42); doc.setFontSize(16); doc.text(cotizacion.nombre,15,54); doc.setFontSize(11); doc.text(`Edad: ${cotizacion.edad} años`,15,62);
   let y=78; planes.forEach((plan,i)=>{ doc.setFillColor(i===0?0:82,i===0?138:169,i===0?55:68); doc.roundedRect(15,y,180,31,3,3,'F'); doc.setTextColor(255,255,255); doc.setFontSize(14); doc.text(`Plan ${plan.id}`,22,y+12); doc.setFontSize(10); doc.text('Suma asegurada',77,y+10); doc.text('Prima',145,y+10); doc.setFontSize(13); doc.text(money(plan.suma),77,y+21); doc.text(money(tarifas[cotizacion.edad][i]),145,y+21); y+=39; });
-  doc.setTextColor(90,105,96); doc.setFontSize(9); doc.text('Importes expresados en moneda nacional. Cotización informativa, sujeta a condiciones y aprobación aplicables.',15,205,{maxWidth:180}); doc.save(`Cotizacion-Argos-${cotizacion.edad}-anos.pdf`);
+  doc.setTextColor(90,105,96); doc.setFontSize(9); doc.text('Importes expresados en moneda nacional. Cotización informativa, sujeta a condiciones y aprobación aplicables.',15,205,{maxWidth:180});
+  const archivo=`Cotizacion-Argos-${cotizacion.edad}-anos.pdf`, url=doc.output('bloburl'), enlace=document.createElement('a'); enlace.href=url; enlace.download=archivo; enlace.style.display='none'; document.body.appendChild(enlace); enlace.click(); enlace.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  } catch (e) { console.error(e); $('error').textContent='No fue posible generar el PDF. Recarga el complemento e inténtalo de nuevo.'; }
 }
 $('modoEdad').addEventListener('click',()=>cambiarModo('edad')); $('modoRfc').addEventListener('click',()=>cambiarModo('rfc')); $('cotizar').addEventListener('click',mostrar); $('pdf').addEventListener('click',pdf); $('rfc').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
 if(window.Office) Office.onReady();
