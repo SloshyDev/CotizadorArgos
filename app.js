@@ -13,7 +13,7 @@ const money = value => new Intl.NumberFormat('es-MX',{style:'currency',currency:
 function cambiarModo(nuevo) { modo=nuevo; $('modoEdad').classList.toggle('selected',nuevo==='edad'); $('modoRfc').classList.toggle('selected',nuevo==='rfc'); $('campoEdad').hidden=nuevo!=='edad'; $('campoRfc').hidden=nuevo!=='rfc'; $('error').textContent=''; }
 function fechaDesdeRfc(valor) {
   const rfc=valor.trim().toUpperCase().replace(/[^A-Z0-9Ñ&]/g,'');
-  const inicio=rfc.length===13 ? 4 : rfc.length===12 ? 3 : -1;
+  const inicio=rfc.length===13 || rfc.length===10 ? 4 : rfc.length===12 || rfc.length===9 ? 3 : -1;
   if(inicio<0 || !/^\d{6}$/.test(rfc.slice(inicio,inicio+6))) return null;
   const yy=Number(rfc.slice(inicio,inicio+2)), mes=Number(rfc.slice(inicio+2,inicio+4)), dia=Number(rfc.slice(inicio+4,inicio+6));
   const anioActual=new Date().getFullYear()%100;

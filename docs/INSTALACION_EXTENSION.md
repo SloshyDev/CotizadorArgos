@@ -8,7 +8,7 @@ Necesitas Google Chrome, Microsoft Edge, Brave u otro navegador basado en Chromi
 
 ## 1. Preparar la carpeta
 
-1. Descarga el archivo `CotizadorArgos-extension-v1.1.0.zip`.
+1. Descarga el archivo `CotizadorArgos-extension-v1.1.1.zip`.
 2. Descomprímelo.
 3. Mueve la carpeta `cotizador-argos-extension` a una ubicación permanente, por ejemplo **Documentos**.
 
@@ -34,7 +34,7 @@ El navegador necesita conservar esa carpeta. No la elimines ni la cambies de ubi
 
 1. Selecciona el icono de la extensión.
 2. Captura el nombre del asegurado, si lo deseas.
-3. Introduce su edad o RFC.
+3. Introduce su edad o RFC, con o sin homoclave.
 4. Selecciona **Generar cotización PDF**.
 
 La cotización se descargará directamente. Incluye los tres planes, sus coberturas y el pago mensual correspondiente.

@@ -11,7 +11,7 @@
       <label for="nombre">Nombre <span>(opcional)</span></label><input id="nombre" autocomplete="name" placeholder="Nombre completo">
       <div class="input-mode"><button id="modoEdad" class="selected" type="button">Ingresar edad</button><button id="modoRfc" type="button">Ingresar RFC</button></div>
       <div id="campoEdad"><label for="edad">Edad</label><input id="edad" inputmode="numeric" type="number" min="50" max="70" placeholder="50 a 70 años"></div>
-      <div id="campoRfc" hidden><label for="rfc">RFC</label><input id="rfc" maxlength="13" autocapitalize="characters" placeholder="Ej. GODE561231GR8"><p class="hint">Usamos la fecha de nacimiento incluida en el RFC.</p></div>
+      <div id="campoRfc" hidden><label for="rfc">RFC</label><input id="rfc" maxlength="13" autocapitalize="characters" placeholder="Ej. GODE561231GR8"><p class="hint">Acepta RFC con o sin homoclave.</p></div>
       <p class="error" id="error" role="alert"></p><button id="cotizar" class="primary" type="button">Ver cotización</button>
     </section>
     <section id="resultado" class="result" hidden><div class="result-top"><div><p class="eyebrow">COTIZACIÓN PARA</p><h2 id="titular">Asegurado</h2><p id="edadCalculada"></p></div><button id="pdf" class="secondary" type="button">Descargar PDF</button></div><div id="planes" class="plans"></div><p class="notice">El importe indicado corresponde a un pago mensual. Importes en moneda nacional; cotización informativa, sujeta a condiciones y aprobación aplicables.</p></section>
