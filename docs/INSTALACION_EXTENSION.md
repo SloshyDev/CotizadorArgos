@@ -8,7 +8,7 @@ Necesitas Google Chrome, Microsoft Edge, Brave u otro navegador basado en Chromi
 
 ## 1. Preparar la carpeta
 
-1. Descarga el archivo `CotizadorArgos-extension-v1.1.1.zip`.
+1. Descarga el archivo `CotizadorArgos-extension-v1.1.2.zip`.
 2. Descomprímelo.
 3. Mueve la carpeta `cotizador-argos-extension` a una ubicación permanente, por ejemplo **Documentos**.
 

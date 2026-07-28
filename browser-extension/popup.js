@@ -3,7 +3,7 @@ const planes=[['329',200000],['328',175000],['327',150000]];
 const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
 const loadImage=src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src});
-let mode='age';
+let mode='rfc';
 
 function setMode(next){mode=next;$('edadMode').classList.toggle('active',next==='age');$('rfcMode').classList.toggle('active',next==='rfc');$('ageField').hidden=next!=='age';$('rfcField').hidden=next!=='rfc';$('error').textContent='';$('status').textContent=''}
 function rfcDate(value){const rfc=value.trim().toUpperCase().replace(/[^A-Z0-9Ñ&]/g,''),start=rfc.length===13||rfc.length===10?4:rfc.length===12||rfc.length===9?3:-1;if(start<0||!/^\d{6}$/.test(rfc.slice(start,start+6)))return null;const yy=+rfc.slice(start,start+2),month=+rfc.slice(start+2,start+4),day=+rfc.slice(start+4,start+6),year=(yy>new Date().getFullYear()%100?1900:2000)+yy,date=new Date(year,month-1,day);return date.getFullYear()===year&&date.getMonth()===month-1&&date.getDate()===day?date:null}
