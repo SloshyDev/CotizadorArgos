@@ -8,11 +8,9 @@ const loadImage=src=>new Promise((resolve,reject)=>{const image=new Image();imag
 async function download(){
   if(!quote||!window.jspdf)return;
   const{jsPDF}=window.jspdf,doc=new jsPDF(),date=quote.date.toLocaleDateString('es-MX');
-  const certeza=await loadImage(chrome.runtime.getURL('assets/certeza-logo.png'));
+  const[certeza,argos]=await Promise.all([loadImage(chrome.runtime.getURL('assets/certeza-logo.png')),loadImage(chrome.runtime.getURL('assets/argos-logo.png'))]);
   doc.setFillColor(255,255,255);doc.rect(0,0,210,39,'F');doc.addImage(certeza,'PNG',15,9,72,19);
-  doc.setTextColor(160,170,162);doc.setFontSize(20);doc.text('×',101,22);
-  doc.setFillColor(0,138,55);doc.circle(119,13,3,'F');doc.setDrawColor(0,138,55);doc.setLineWidth(1.6);doc.line(116,29,119,18);doc.line(119,18,122,29);
-  doc.setTextColor(0,122,54);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text('SEGUROS',126,13);doc.setFont('helvetica','bold');doc.setFontSize(21);doc.text('ARGOS',126,29);doc.setDrawColor(225,232,227);doc.setLineWidth(.5);doc.line(15,39,195,39);
+  doc.setTextColor(160,170,162);doc.setFontSize(20);doc.text('×',101,22);doc.addImage(argos,'PNG',116,7,76,31);doc.setDrawColor(225,232,227);doc.setLineWidth(.5);doc.line(15,39,195,39);
   doc.setTextColor(100,116,105);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text('ALIANZA COMERCIAL',15,49);doc.text(`Fecha: ${date}`,195,49,{align:'right'});doc.setTextColor(23,51,36);doc.setFontSize(16);doc.text(quote.name,15,61);doc.setFontSize(11);doc.text(`Edad: ${quote.age} años`,15,69);
   let y=84;planes.forEach(([id,sum],i)=>{doc.setFillColor(i?82:0,i?169:138,i?68:55);doc.roundedRect(15,y,180,31,3,3,'F');doc.setTextColor(255,255,255);doc.setFontSize(14);doc.text(`Plan ${id}`,22,y+12);doc.setFontSize(10);doc.text('Suma asegurada',77,y+10);doc.text('Prima',145,y+10);doc.setFontSize(13);doc.text(money(sum),77,y+21);doc.text(money(tarifas[quote.age][i]),145,y+21);y+=39});
   doc.setTextColor(90,105,96);doc.setFontSize(9);doc.text('Importes expresados en moneda nacional. Cotización informativa, sujeta a condiciones y aprobación aplicables.',15,212,{maxWidth:180});doc.save(`Cotizacion-Argos-${quote.age}-anos.pdf`)
