@@ -41,13 +41,12 @@ async function createPdf(quote){
     const x=15+i*61,accent=[[0,138,66],[98,20,51],[45,103,71]][i];
     glass(doc,x,154,56,68,6,.91);
     doc.setFillColor(...accent);doc.roundedRect(x,154,56,5,6,6,'F');doc.rect(x,157,56,2,'F');
-    doc.setTextColor(...accent);doc.setFont('helvetica','bold');doc.setFontSize(8);doc.text(`PLAN ${id}`,x+7,168);
-    doc.setFillColor(...accent);doc.circle(x+46,166,5,'F');doc.setTextColor(255,255,255);doc.setFontSize(7);doc.text(`0${i+1}`,x+46,168.3,{align:'center'});
-    doc.setTextColor(31,53,43);doc.setFontSize(15);doc.text(money(sum),x+28,184,{align:'center'});
+    doc.setTextColor(...accent);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(`PLAN ${id}`,x+28,169,{align:'center'});
+    doc.setTextColor(31,53,43);doc.setFontSize(17);doc.text(money(sum),x+28,185,{align:'center'});
     doc.setDrawColor(220,230,223);doc.setLineWidth(.35);doc.line(x+7,190,x+49,190);
     doc.setGState(new doc.GState({opacity:.1}));doc.setFillColor(...accent);doc.roundedRect(x+6,195,44,20,4,4,'F');doc.setGState(new doc.GState({opacity:1}));
     doc.setTextColor(98,113,104);doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.text('PAGO MENSUAL',x+28,201,{align:'center'});
-    doc.setTextColor(...accent);doc.setFontSize(15);doc.text(money(tarifas[quote.age][i]),x+28,212,{align:'center'});
+    doc.setTextColor(...accent);doc.setFontSize(17);doc.text(money(tarifas[quote.age][i]),x+28,212,{align:'center'});
   });
 
   doc.setTextColor(100,115,105);doc.setFontSize(7.5);doc.text('El importe indicado corresponde a un pago mensual. Cotización informativa, sujeta a condiciones, exclusiones y aprobación aplicables.',15,246,{maxWidth:180});
