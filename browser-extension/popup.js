@@ -14,7 +14,7 @@ async function createPdf(quote){
   const{jsPDF}=window.jspdf,doc=new jsPDF(),date=quote.date.toLocaleDateString('es-MX');
   const[certeza,argos,familia]=await Promise.all([
     loadImage(chrome.runtime.getURL('assets/certeza-logo.png')),
-    loadImage(chrome.runtime.getURL('assets/argos-logo.png')),
+    loadImage(chrome.runtime.getURL('assets/argos-logo-transparent.png')),
     loadImage(chrome.runtime.getURL('assets/proteccion-familiar.jpg'))
   ]);
 
@@ -42,19 +42,13 @@ async function createPdf(quote){
     glass(doc,x,154,56,61,5,.9);
     doc.setFillColor(i===0?0:38,i===0?138:135,i===0?66:73);doc.roundedRect(x,154,56,7,5,5,'F');doc.rect(x,158,56,3,'F');
     doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text(`PLAN ${id}`,x+28,159,{align:'center'});
-    doc.setTextColor(105,120,110);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text('SUMA ASEGURADA',x+7,172);doc.text('POR FALLECIMIENTO',x+7,177);
-    doc.setTextColor(31,53,43);doc.setFont('helvetica','bold');doc.setFontSize(13);doc.text(money(sum),x+7,187);
-    doc.setTextColor(105,120,110);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text('PAGO MENSUAL',x+7,197);
-    doc.setTextColor(0,125,61);doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text(money(tarifas[quote.age][i]),x+7,208);
+    doc.setTextColor(31,53,43);doc.setFont('helvetica','bold');doc.setFontSize(13);doc.text(money(sum),x+7,180);
+    doc.setTextColor(105,120,110);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.text('PAGO MENSUAL',x+7,195);
+    doc.setTextColor(0,125,61);doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text(money(tarifas[quote.age][i]),x+7,207);
   });
 
-  glass(doc,15,226,180,32,5,.82);
-  doc.setFillColor(98,20,51);doc.circle(26,242,6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('✓',26,245,{align:'center'});
-  doc.setTextColor(31,53,43);doc.setFontSize(10);doc.text('Seguro por fallecimiento',38,239);
-  doc.setTextColor(93,109,99);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('La suma asegurada brinda respaldo económico a los beneficiarios',38,246);doc.text('en caso de fallecimiento del asegurado titular.',38,251);
-
-  doc.setTextColor(100,115,105);doc.setFontSize(7.5);doc.text('El importe indicado corresponde a un pago mensual. Cotización informativa, sujeta a condiciones, exclusiones y aprobación aplicables.',15,275,{maxWidth:180});
-  doc.setDrawColor(205,218,209);doc.line(15,282,195,282);doc.setTextColor(120,132,124);doc.text('Certeza Soluciones en Seguros  ×  Seguros Argos',15,289);doc.text('Alianza comercial',195,289,{align:'right'});
+  doc.setTextColor(100,115,105);doc.setFontSize(7.5);doc.text('El importe indicado corresponde a un pago mensual. Cotización informativa, sujeta a condiciones, exclusiones y aprobación aplicables.',15,246,{maxWidth:180});
+  doc.setDrawColor(205,218,209);doc.line(15,263,195,263);doc.setTextColor(120,132,124);doc.text('Certeza Soluciones en Seguros  ×  Seguros Argos',15,271);
   doc.save(`Cotizacion-Seguro-Fallecimiento-${quote.age}-anos.pdf`);
 }
 
