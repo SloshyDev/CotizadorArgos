@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Cotizador Argos",
+  "version": "1.0.0",
+  "description": "Genera cotizaciones Argos en PDF por edad o RFC.",
+  "action": {
+    "default_title": "Cotizador Argos",
+    "default_popup": "popup.html"
+  }
+}

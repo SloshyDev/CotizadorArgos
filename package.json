@@ -5,10 +5,17 @@
   "scripts": {
     "certs": "office-addin-dev-certs install",
     "start": "http-server . -p 3000 -c-1",
-    "start:https": "http-server . -p 3000 -S -C /Users/sloshy/.office-addin-dev-certs/localhost.crt -K /Users/sloshy/.office-addin-dev-certs/localhost.key -c-1"
+    "start:https": "http-server . -p 3000 -S -C /Users/sloshy/.office-addin-dev-certs/localhost.crt -K /Users/sloshy/.office-addin-dev-certs/localhost.key -c-1",
+    "build:extension": "node scripts/build-extension.mjs"
+  },
+  "dependencies": {
+    "jspdf": "^3.0.4"
   },
   "devDependencies": {
     "http-server": "^14.1.1",
     "office-addin-dev-certs": "^2.0.10"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1"
   }
 }
